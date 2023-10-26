@@ -108,7 +108,7 @@ function skipSpaceRev(s, i, j) {
   @param {number} i 
   @returns {Array<string>}
 */
-function fillArgs(s, i) {
+function convertArgsStrToArray(s, i) {
 	/** @type {Array<string>} */
 	let ret = new Array();
 	outer: for (let j; i < s.length; i = j + 1) {
@@ -149,8 +149,8 @@ function getFunc(s) {
 	let func = new Func();
 	func.returnType = regexMatch[1];
 	func.name = regexMatch[2];
-	const argsString = regexMatch[3];
-	func.args = fillArgs(argsString, 0);
+	const argsStr = regexMatch[3];
+	func.args = convertArgsStrToArray(argsStr, 0);
 	func.body = regexMatch[4];
 	return func;
 }
@@ -158,7 +158,7 @@ function getFunc(s) {
 /** @type {string} */
 const filename = process.argv[2];
 /** @type {string} */
-const fileString = filesystem.readFileSync(filename).toString();
+const fileStr = filesystem.readFileSync(filename).toString();
 /** @type {Array<string>} */
-const fileArray = fileString.split("\n\n");
+const fileArray = fileStr.split("\n\n");
 for (let i = 0; i < fileArray.length; ++i) console.log(fileArray[i]);
