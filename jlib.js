@@ -109,7 +109,7 @@ function convertArgsStrToArray(s, i) {
 	let ret = new Array();
 	outer: for (let j; i < s.length; i = j + 1) {
 		for (j = i; ; ++j) {
-			if (j == s.length) {
+			if (j == s.length - 1) {
 				const ii = skipSpace(s, i);
 				const jj = skipSpaceRev(s, ii, j);
 				ret.push(s.substring(ii, jj));
