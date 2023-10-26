@@ -30,22 +30,20 @@ class Func {
 
 	/** @param {string} arg */
 	argRemove(arg) {
-		for (let i = 0; i < this.args.length; ++i) {
+		for (let i = 0; i < this.args.length; ++i)
 			if (arg == this.args[i]) {
 				this.args.splice(i);
 				break;
 			}
-		}
 	}
 
 	/** @returns {string} */
 	argsToString() {
 		/** @type {string} */
 		let ret = "";
-		for (let i = 0; i < this.args.length; ++i) {
+		for (let i = 0; i < this.args.length; ++i)
 			if (i != this.args.length - 1) ret += this.args[i] + " ,";
 			else ret += this.args[i];
-		}
 		return ret;
 	}
 
