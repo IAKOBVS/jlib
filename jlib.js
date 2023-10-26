@@ -4,24 +4,35 @@
 const fs = require("fs");
 const proc = require("process");
 
-class Arg {
-	/** @type {string} type */
-	type;
-	/** @type {string} */
-	ptr;
-	/** @type {string} */
-	name;
-}
+// class Arg {
+// 	/** @type {string} type */
+// 	type;
+// 	/** @type {string} */
+// 	ptr;
+// 	/** @type {string} */
+// 	name;
+// }
 
 class Func {
 	/** @type {string} */
 	returnType;
 	/** @type {string} */
 	name;
-	/** @type {Array<Arg>} */
+	/** @type {Array<string>} */
 	args;
 	/** @type {string} */
 	body;
+
+	/** @param {string} arg */
+	pushArg(arg) {
+		this.args.push(arg);
+	}
+
+	/** @param {string} arg */
+	deleteArg(arg) {
+		for (let i = 0; i < this.args.length; ++i)
+			if (arg == this.args[i]) this.args.splice(i);
+	}
 }
 
 /**
@@ -58,18 +69,18 @@ function skipSpaceRev(s, i, j) {
 /**
   @param {string} s 
   @param {number} i 
-  @return {Array<string>|null}
+  @return {Array<string>}
 */
 function fillArgs(s, i) {
 	/** @type {Array<string>} */
 	let ret = new Array();
-	for (let j; i < s.length; i = j + 1) {
+	outer: for (let j; i < s.length; i = j + 1) {
 		for (j = i; ; ++j) {
 			if (j == s.length) {
 				const ii = skipSpace(s, i);
 				const jj = skipSpaceRev(s, ii, j);
 				ret.push(s.substring(ii, jj));
-				return ret;
+				break outer;
 			}
 			if (s[j] == ",") {
 				const ii = skipSpace(s, i);
@@ -79,7 +90,7 @@ function fillArgs(s, i) {
 			}
 		}
 	}
-	return null;
+	return ret;
 }
 
 /**
@@ -101,12 +112,9 @@ function getFunc(s) {
 	let func = new Func();
 	func.returnType = regexMatch[1];
 	func.name = regexMatch[2];
-	const args = regexMatch[3];
+	const argsString = regexMatch[3];
+	func.args = fillArgs(argsString, 0);
 	func.body = regexMatch[4];
-	console.log(func.returnType);
-	console.log(func.name);
-	console.log(args);
-	console.log(func.body);
 	return func;
 }
 
@@ -116,5 +124,4 @@ const filename = proc.argv[2];
 const fileString = fs.readFileSync(filename).toString();
 /** @type {Array<string>} */
 const fileArray = fileString.split("\n\n");
-for (let i = 0; i < fileArray.length; ++i)
-	console.log(fileArray[i]);
+for (let i = 0; i < fileArray.length; ++i) console.log(fileArray[i]);
