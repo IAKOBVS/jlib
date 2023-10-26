@@ -1,7 +1,7 @@
 // @ts-check
 "use strict";
 
-const filesystem = require("fs");
+const fs = require("fs");
 const process = require("process");
 
 // class Arg {
@@ -158,7 +158,7 @@ function getFunc(s) {
 /** @type {string} */
 const filename = process.argv[2];
 /** @type {string} */
-const fileStr = filesystem.readFileSync(filename).toString();
+const fileStr = fs.readFileSync(filename).toString();
 /** @type {Array<string>} */
 const fileArray = fileStr.split("\n\n");
 for (let i = 0; i < fileArray.length; ++i) console.log(fileArray[i]);
