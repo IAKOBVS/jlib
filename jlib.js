@@ -1,8 +1,8 @@
 // @ts-check
 "use strict";
 
-const fs = require("fs");
-const proc = require("process");
+const filesystem = require("fs");
+const process = require("process");
 
 // class Arg {
 // 	/** @type {string} type */
@@ -24,21 +24,58 @@ class Func {
 	body;
 
 	/** @param {string} arg */
-	pushArg(arg) {
+	argPush(arg) {
 		this.args.push(arg);
 	}
 
 	/** @param {string} arg */
-	deleteArg(arg) {
-		for (let i = 0; i < this.args.length; ++i)
-			if (arg == this.args[i]) this.args.splice(i);
+	argRemove(arg) {
+		for (let i = 0; i < this.args.length; ++i) {
+			if (arg == this.args[i]) {
+				this.args.splice(i);
+				break;
+			}
+		}
+	}
+
+	/** @returns {string} */
+	argsToString() {
+		/** @type {string} */
+		let ret = '';
+		for (let i = 0; i < this.args.length; ++i) {
+			if (i != this.args.length - 1)
+				ret += this.args[i] + " ,";
+			else
+				ret += this.args[i];
+		}
+		return ret;
+	}
+
+	/** @param {string} suffix */
+	nameAppend(suffix) {
+		this.name += suffix;
+	}
+
+	/** @param {string} prefix */
+	namePrepend(prefix) {
+		this.name = prefix + this.name;
+	}
+
+	/** @returns {boolean} */
+	returnsValue() {
+		return this.returnType.indexOf("void") == -1;
+	}
+
+	/** @returns {boolean} */
+	isVoid() {
+		return !this.returnsValue();
 	}
 }
 
 /**
   @param {string} s
   @param {number} i start
-  @return {number}
+  @returns {number}
 */
 function skipNotSpace(s, i) {
 	for (; i < s.length && /\s/.test(s[i]); ++i);
@@ -48,7 +85,7 @@ function skipNotSpace(s, i) {
 /**
   @param {string} s
   @param {number} i start
-  @return {number}
+  @returns {number}
 */
 function skipSpace(s, i) {
 	for (; i < s.length && /\s/.test(s[i]); ++i);
@@ -59,7 +96,7 @@ function skipSpace(s, i) {
   @param {string} s
   @param {number} i start
   @param {number} j end
-  @return {number}
+  @returns {number}
 */
 function skipSpaceRev(s, i, j) {
 	for (; j > i && /\s/.test(s[j]); --j);
@@ -69,7 +106,7 @@ function skipSpaceRev(s, i, j) {
 /**
   @param {string} s 
   @param {number} i 
-  @return {Array<string>}
+  @returns {Array<string>}
 */
 function fillArgs(s, i) {
 	/** @type {Array<string>} */
@@ -94,7 +131,7 @@ function fillArgs(s, i) {
 }
 
 /**
-  @return {Func|null}
+  @returns {Func|null}
   @param {string} s
 */
 function getFunc(s) {
@@ -119,9 +156,9 @@ function getFunc(s) {
 }
 
 /** @type {string} */
-const filename = proc.argv[2];
+const filename = process.argv[2];
 /** @type {string} */
-const fileString = fs.readFileSync(filename).toString();
+const fileString = filesystem.readFileSync(filename).toString();
 /** @type {Array<string>} */
 const fileArray = fileString.split("\n\n");
 for (let i = 0; i < fileArray.length; ++i) console.log(fileArray[i]);
