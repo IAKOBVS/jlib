@@ -4,32 +4,54 @@
 const fs = require("fs");
 const process = require("process");
 
-// class Arg {
-// 	/** @type {string} type */
-// 	type;
-// 	/** @type {string} */
-// 	ptr;
-// 	/** @type {string} */
-// 	name;
-// }
+if (false) {
+	class Arg {
+		/**
+		 * @type {string} type
+		 */
+		type;
+		/**
+		 * @type {string}
+		 */
+		ptr;
+		/**
+		 * @type {string}
+		 */
+		name;
+	}
+}
 
 class Func {
-	/** @type {string} */
+	/**
+	 * @type {string}
+	 */
 	returnType;
-	/** @type {string} */
+	/**
+	 * @type {string}
+	 */
 	name;
-	/** @type {Array<string>} */
+	/**
+	 * @type {Array<string>}
+	 */
 	args;
-	/** @type {string} */
+	/**
+	 * @type {string}
+	 */
 	body;
 
-	/** @param {string} arg */
-	argPush(arg) {
+	/**
+	 * @param {string} arg
+	 */
+	argPush(arg)
+	{
 		this.args.push(arg);
 	}
 
-	/** @param {string} arg */
-	argRemove(arg) {
+	/**
+	 * @param {string} arg
+	 */
+	argRemove(arg)
+	{
 		for (let i = 0; i < this.args.length; ++i)
 			if (arg == this.args[i]) {
 				this.args.splice(i);
@@ -37,33 +59,52 @@ class Func {
 			}
 	}
 
-	/** @returns {string} */
-	argsToString() {
-		/** @type {string} */
+	/**
+	 * @returns {string}
+	 */
+	argsToString()
+	{
+		/**
+		 * @type {string}
+		 */
 		let ret = "";
 		for (let i = 0; i < this.args.length; ++i)
-			if (i != this.args.length - 1) ret += this.args[i] + " ,";
-			else ret += this.args[i];
+			if (i != this.args.length - 1)
+				ret += this.args[i] + " ,";
+			else
+				ret += this.args[i];
 		return ret;
 	}
 
-	/** @param {string} suffix */
-	nameAppend(suffix) {
+	/**
+	 * @param {string} suffix
+	 */
+	nameAppend(suffix)
+	{
 		this.name += suffix;
 	}
 
-	/** @param {string} prefix */
-	namePrepend(prefix) {
+	/**
+	 * @param {string} prefix
+	 */
+	namePrepend(prefix)
+	{
 		this.name = prefix + this.name;
 	}
 
-	/** @returns {boolean} */
-	returnsValue() {
+	/**
+	 * @returns {boolean}
+	 */
+	returnsValue()
+	{
 		return this.returnType.indexOf("void") == -1;
 	}
 
-	/** @returns {boolean} */
-	isVoid() {
+	/**
+	 * @returns {boolean}
+	 */
+	isVoid()
+	{
 		return !this.returnsValue();
 	}
 }
@@ -73,8 +114,10 @@ class Func {
   @param {number} i start
   @returns {number}
 */
-function skipNotSpace(s, i) {
-	for (; i < s.length && /\s/.test(s[i]); ++i);
+function skipNotSpace(s, i)
+{
+	for (; i < s.length && /\s/.test(s[i]); ++i)
+		;
 	return i;
 }
 
@@ -83,8 +126,10 @@ function skipNotSpace(s, i) {
   @param {number} i start
   @returns {number}
 */
-function skipSpace(s, i) {
-	for (; i < s.length && /\s/.test(s[i]); ++i);
+function skipSpace(s, i)
+{
+	for (; i < s.length && /\s/.test(s[i]); ++i)
+		;
 	return i;
 }
 
@@ -94,21 +139,27 @@ function skipSpace(s, i) {
   @param {number} j end
   @returns {number}
 */
-function skipSpaceRev(s, i, j) {
-	for (; j > i && /\s/.test(s[j]); --j);
+function skipSpaceRev(s, i, j)
+{
+	for (; j > i && /\s/.test(s[j]); --j)
+		;
 	return j;
 }
 
 /**
-  @param {string} s 
-  @param {number} i 
+  @param {string} s
+  @param {number} i
   @returns {Array<string>}
 */
-function convertArgsStrToArray(s, i) {
-	/** @type {Array<string>} */
+function convertArgsStrToArray(s, i)
+{
+	/**
+	 * @type {Array<string>}
+	 */
 	let ret = new Array();
-	outer: for (let j; i < s.length; i = j + 1) {
-		for (j = i; ; ++j) {
+	outer: for (let j; i < s.length; i = j + 1)
+	{
+		for (j = i;; ++j) {
 			if (j == s.length - 1) {
 				const ii = skipSpace(s, i);
 				const jj = skipSpaceRev(s, ii, j);
@@ -130,18 +181,18 @@ function convertArgsStrToArray(s, i) {
   @returns {Func|null}
   @param {string} s
 */
-function getFunc(s) {
-	const regexMatch =
-		/((?:\w|\s|\*)+)*(\w+)\s*\(([^(){};]*)\)[^(){};]*\{(.*)\}/.exec(s);
-	if (!regexMatch) return null;
-	if (
-		regexMatch[2] == "if" ||
-		regexMatch[2] == "else if" ||
-		regexMatch[2] == "for" ||
-		regexMatch[2] == "while"
-	)
+function getFunc(s)
+{
+	const regexMatch = /((?:\w|\s|\*)+)*(\w+)\s*\(([^(){};]*)\)[^(){};]*\{(.*)\}/.exec(s);
+	if (!regexMatch
+	    || regexMatch[2] == "if"
+	    || regexMatch[2] == "else if"
+	    || regexMatch[2] == "for"
+	    || regexMatch[2] == "while")
 		return null;
-	/** @type {Func} */
+	/**
+	 * @type {Func}
+	 */
 	let func = new Func();
 	func.returnType = regexMatch[1];
 	func.name = regexMatch[2];
@@ -155,8 +206,11 @@ function getFunc(s) {
   @param {Array<string>} fileArray
   @param {string} prefix
 */
-function namespaceMacro(fileArray, prefix) {
-	/** @type {RegExpMatchArray|null} */
+function namespaceMacro(fileArray, prefix)
+{
+	/**
+	 * @type {RegExpMatchArray|null}
+	 */
 	let regexMatch;
 	for (let i = 0; i < fileArray.length; ++i) {
 		regexMatch = /undef \w+/.exec(fileArray[i]);
@@ -167,14 +221,23 @@ function namespaceMacro(fileArray, prefix) {
 	return fileArray;
 }
 
-/** @type {string} */
+/**
+ * @type {string}
+ */
 const namespace = "PJSTR_";
 
-/** @type {string} */
+/**
+ * @type {string}
+ */
 const filename = process.argv[2];
-/** @type {string} */
+/**
+ * @type {string}
+ */
 const fileStr = fs.readFileSync(filename).toString();
-/** @type {Array<string>} */
+/**
+ * @type {Array<string>}
+ */
 let fileArray = fileStr.split("\n\n");
 fileArray = namespaceMacro(fileArray, namespace);
-for (let i = 0; i < fileArray.length; ++i) console.log(fileArray[i]);
+for (let i = 0; i < fileArray.length; ++i)
+	console.log(fileArray[i]);
