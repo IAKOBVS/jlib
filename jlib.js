@@ -213,7 +213,7 @@ function namespaceMacro(fileArray, prefix)
 	 */
 	let regexMatch;
 	for (let i = 0; i < fileArray.length; ++i) {
-		regexMatch = /undef \w+/.exec(fileArray[i]);
+		regexMatch = /^\s*#\s+undef\s+\w+/.exec(fileArray[i]);
 		if (regexMatch)
 			for (let j = 0; j < fileArray.length; ++j)
 				fileArray[j].replace(/regexMatch[1]/g, prefix + regexMatch[1]);
