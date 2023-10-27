@@ -41,6 +41,7 @@ class Func {
 
 	/**
 	 * @param {string} arg
+	 * @returns {void}
 	 */
 	argPush(arg)
 	{
@@ -49,6 +50,7 @@ class Func {
 
 	/**
 	 * @param {string} arg
+	 * @returns {void}
 	 */
 	argRemove(arg)
 	{
@@ -78,6 +80,7 @@ class Func {
 
 	/**
 	 * @param {string} suffix
+	 * @returns {void}
 	 */
 	nameAppend(suffix)
 	{
@@ -86,6 +89,7 @@ class Func {
 
 	/**
 	 * @param {string} prefix
+	 * @returns {void}
 	 */
 	namePrepend(prefix)
 	{
