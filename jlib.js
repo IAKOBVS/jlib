@@ -31,7 +31,7 @@ class Func {
 	 */
 	name;
 	/**
-	 * @type {Array<string>}
+	 * @type {string[]}
 	 */
 	args;
 	/**
@@ -153,12 +153,12 @@ function skipSpaceRev(s, i, j)
 /**
   @param {string} s
   @param {number} i
-  @returns {Array<string>}
+  @returns {string[]}
 */
 function convertArgsStrToArray(s, i)
 {
 	/**
-	 * @type {Array<string>}
+	 * @type {string[]}
 	 */
 	let ret = new Array();
 	outer: for (let j; i < s.length; i = j + 1)
@@ -182,8 +182,8 @@ function convertArgsStrToArray(s, i)
 }
 
 /**
-  @returns {Func|null}
   @param {string} s
+  @returns {Func|null}
 */
 function getFunc(s)
 {
@@ -206,8 +206,9 @@ function getFunc(s)
 }
 
 /**
-  @param {Array<string>} fileArray
+  @param {string[]} fileArray
   @param {string} prefix
+  @returns {string[]}
 */
 function namespaceMacro(fileArray, prefix)
 {
@@ -224,22 +225,10 @@ function namespaceMacro(fileArray, prefix)
 	return fileArray;
 }
 
-/**
- * @type {string}
- */
-const namespace = "PJSTR_";
+let namespace = "PJSTR_";
 
-/**
- * @type {string}
- */
 const filename = process.argv[2];
-/**
- * @type {string}
- */
 const fileStr = fs.readFileSync(filename).toString();
-/**
- * @type {Array<string>}
- */
 let fileArray = fileStr.split("\n\n");
 fileArray = namespaceMacro(fileArray, namespace);
 for (let i = 0; i < fileArray.length; ++i)
