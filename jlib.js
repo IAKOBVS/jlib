@@ -196,8 +196,7 @@ function getFunc(s)
 	let func = new Func();
 	func.returnType = regexMatch[1];
 	func.name = regexMatch[2];
-	const argsStr = regexMatch[3];
-	func.args = convertArgsStrToArray(argsStr, 0);
+	func.args = convertArgsStrToArray(regexMatch[3], 0);
 	func.body = regexMatch[4];
 	return func;
 }
