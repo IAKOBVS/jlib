@@ -111,6 +111,15 @@ class Func {
 	{
 		return !this.returnsValue();
 	}
+
+	/**
+	 * @returns {string}
+	 */
+	toString()
+	{
+		return this.returnType + ' ' + this.name + '(' + this.argsToString() + ')' +
+		       '\n{' + this.body + '}';
+	}
 }
 
 /**
@@ -217,19 +226,29 @@ function namespaceMacro(fileArray, prefix)
 	 */
 	let regexMatch;
 	for (let i = 0; i < fileArray.length; ++i) {
-		regexMatch = /^\s*#\s+undef\s+\w+/.exec(fileArray[i]);
-		if (regexMatch)
-			for (let j = 0; j < fileArray.length; ++j)
-				fileArray[j].replace(/regexMatch[1]/g, prefix + regexMatch[1]);
+		regexMatch = /^\s*#\s*undef\s+(\w+)/.exec(fileArray[i]);
+		if (!regexMatch
+		    || regexMatch[1].startsWith("JSTR")
+		    || regexMatch[1].startsWith("PJSTR")
+		    || regexMatch[1].startsWith("jstr")
+		    || regexMatch[1].startsWith("pjstr"))
+			continue;
+		for (let j = i; j >= 0; --j)
+			fileArray[j] = fileArray[j].replace(new RegExp("(\\W|^)" + regexMatch[1] + "(\\W|$)", 'g'), "$1" + prefix + regexMatch[1] + "$2");
 	}
 	return fileArray;
 }
 
-let namespace = "PJSTR_";
-
+const namespace = "PJSTR_";
 const filename = process.argv[2];
 const fileStr = fs.readFileSync(filename).toString();
 let fileArray = fileStr.split("\n\n");
 fileArray = namespaceMacro(fileArray, namespace);
-for (let i = 0; i < fileArray.length; ++i)
-	console.log(fileArray[i]);
+for (let i = 0; i < fileArray.length; ++i) {
+	// console.log(fileArray[i]);
+	// const func = getFunc(fileArray[i]);
+	// if (!func)
+	// 	continue;
+	// func.namePrepend("_");
+	// console.log(func.toString());
+}
