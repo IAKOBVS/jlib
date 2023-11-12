@@ -153,7 +153,8 @@ function getFunc(s)
 	func.name = regexMatch[3];
 	func.args = convertArgsStrToArray(regexMatch[4]);
 	func.body = regexMatch[5];
-	if (func.name == "if"
+	if (func.returnType == "define"
+	    || func.name == "if"
 	    || func.name == "else if"
 	    || func.name == "for"
 	    || func.name == "while")
