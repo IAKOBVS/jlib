@@ -165,33 +165,11 @@ function skipSpaceRev(s, i, j)
 
 /**
   @param {string} s
-  @param {number} i
   @returns {string[]}
 */
-function convertArgsStrToArray(s, i)
+function convertArgsStrToArray(s)
 {
-	/**
-	 * @type {string[]}
-	 */
-	let ret = new Array();
-	outer: for (let j; i < s.length; i = j + 1)
-	{
-		for (j = i;; ++j) {
-			if (j == s.length - 1) {
-				const ii = skipSpace(s, i);
-				const jj = skipSpaceRev(s, ii, j);
-				ret.push(s.substring(ii, jj));
-				break outer;
-			}
-			if (s[j] == ",") {
-				const ii = skipSpace(s, i);
-				const jj = skipSpaceRev(s, ii, j);
-				ret.push(s.substring(ii, jj));
-				break;
-			}
-		}
-	}
-	return ret;
+	return s.split(',');
 }
 
 /**
@@ -210,7 +188,7 @@ function getFunc(s)
 	func.attr = regexMatch[1];
 	func.returnType = regexMatch[2];
 	func.name = regexMatch[3];
-	func.args = convertArgsStrToArray(regexMatch[4], 0);
+	func.args = convertArgsStrToArray(regexMatch[4]);
 	func.body = regexMatch[5];
 	if (func.name == "if"
 	    || func.name == "else if"
