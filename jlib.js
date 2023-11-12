@@ -164,10 +164,10 @@ function getFunc(s)
 /**
   @param {string[]} fileArray
   @param {string} prefix
-  @param {string[]} ignore_prefixes
+  @param {string[]} ignorePrefixes
   @returns {string[]}
 */
-function namespaceMacro(fileArray, prefix, ignore_prefixes)
+function namespaceMacro(fileArray, prefix, ignorePrefixes)
 {
 	/**
 	 * @type {RegExpMatchArray|null}
@@ -177,8 +177,8 @@ function namespaceMacro(fileArray, prefix, ignore_prefixes)
 		regexMatch = /^\s*#\s*undef\s+(\w+)/.exec(fileArray[i]);
 		if (!regexMatch)
 			continue;
-		for (let i = 0; i < ignore_prefixes.length; ++i)
-			if (regexMatch[1].startsWith(ignore_prefixes[i]))
+		for (let i = 0; i < ignorePrefixes.length; ++i)
+			if (regexMatch[1].startsWith(ignorePrefixes[i]))
 				continue;
 		for (let j = i; j >= 0; --j)
 			fileArray[j] = fileArray[j].replace(new RegExp("(\\W|^)" + regexMatch[1] + "(\\W|$)", 'g'), "$1" + prefix + regexMatch[1] + "$2");
