@@ -128,43 +128,6 @@ class Func {
 
 /**
   @param {string} s
-  @param {number} i start
-  @returns {number}
-*/
-function skipNotSpace(s, i)
-{
-	for (; i < s.length && /\s/.test(s[i]); ++i)
-		;
-	return i;
-}
-
-/**
-  @param {string} s
-  @param {number} i start
-  @returns {number}
-*/
-function skipSpace(s, i)
-{
-	for (; i < s.length && /\s/.test(s[i]); ++i)
-		;
-	return i;
-}
-
-/**
-  @param {string} s
-  @param {number} i start
-  @param {number} j end
-  @returns {number}
-*/
-function skipSpaceRev(s, i, j)
-{
-	for (; j > i && /\s/.test(s[j]); --j)
-		;
-	return j;
-}
-
-/**
-  @param {string} s
   @returns {string[]}
 */
 function convertArgsStrToArray(s)
