@@ -76,7 +76,7 @@ class Func {
 		let ret = "";
 		for (let i = 0; i < this.args.length; ++i)
 			if (i != this.args.length - 1)
-				ret += this.args[i] + " ,";
+				ret += this.args[i] + ", ";
 			else
 				ret += this.args[i];
 		return ret;
@@ -121,8 +121,7 @@ class Func {
 	 */
 	toString()
 	{
-		return this.returnType + ' ' + this.name + '(' + this.argsToString() + ')' +
-		       '\n{' + this.body + '}';
+		return `${this.returnType} ${this.name}(${this.argsToString()})\n{ ${this.body} }`;
 	}
 }
 
@@ -182,7 +181,7 @@ function namespaceMacro(fileArray, prefix, ignorePrefixes)
 			if (regexMatch[1].startsWith(ignorePrefixes[i]))
 				continue;
 		for (let j = i; j >= 0; --j)
-			fileArray[j] = fileArray[j].replace(new RegExp("(\\W|^)" + regexMatch[1] + "(\\W|$)", 'g'), "$1" + prefix + regexMatch[1] + "$2");
+			fileArray[j] = fileArray[j].replace(new RegExp(`(\\W|^)${regexMatch[1]}(\\W|$)`, 'g'), `$1${prefix}${regexMatch[1]}$2`);
 	}
 	return fileArray;
 }
