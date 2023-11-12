@@ -164,9 +164,10 @@ function getFunc(s)
 /**
   @param {string[]} fileArray
   @param {string} prefix
+  @param {string[]} ignore_prefixes
   @returns {string[]}
 */
-function namespaceMacro(fileArray, prefix)
+function namespaceMacro(fileArray, prefix, ignore_prefixes)
 {
 	/**
 	 * @type {RegExpMatchArray|null}
@@ -174,12 +175,11 @@ function namespaceMacro(fileArray, prefix)
 	let regexMatch;
 	for (let i = 0; i < fileArray.length; ++i) {
 		regexMatch = /^\s*#\s*undef\s+(\w+)/.exec(fileArray[i]);
-		if (!regexMatch
-		    || regexMatch[1].startsWith("JSTR")
-		    || regexMatch[1].startsWith("PJSTR")
-		    || regexMatch[1].startsWith("jstr")
-		    || regexMatch[1].startsWith("pjstr"))
+		if (!regexMatch)
 			continue;
+		for (let i = 0; i < ignore_prefixes.length; ++i)
+			if (regexMatch[1].startsWith(ignore_prefixes[i]))
+				continue;
 		for (let j = i; j >= 0; --j)
 			fileArray[j] = fileArray[j].replace(new RegExp("(\\W|^)" + regexMatch[1] + "(\\W|$)", 'g'), "$1" + prefix + regexMatch[1] + "$2");
 	}
@@ -190,7 +190,7 @@ const namespace = "PJSTR_";
 const filename = process.argv[2];
 const fileStr = fs.readFileSync(filename).toString();
 let fileArray = fileStr.split("\n\n");
-fileArray = namespaceMacro(fileArray, namespace);
+fileArray = namespaceMacro(fileArray, namespace, [ "JSTR", "jstr", "PJSTR", "pjstr" ]);
 for (let i = 0; i < fileArray.length; ++i) {
 	const func = getFunc(fileArray[i]);
 	if (!func)
