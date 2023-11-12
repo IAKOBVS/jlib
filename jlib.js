@@ -25,6 +25,10 @@ class Func {
 	/**
 	 * @type {string}
 	 */
+	attr;
+	/**
+	 * @type {string}
+	 */
 	returnType;
 	/**
 	 * @type {string}
@@ -196,21 +200,23 @@ function convertArgsStrToArray(s, i)
 */
 function getFunc(s)
 {
-	const regexMatch = /((?:\w|\s|\*)+)*(\w+)\s*\(([^(){};]*)\)[^(){};]*\{(.*)\}/.exec(s);
-	if (!regexMatch
-	    || regexMatch[2] == "if"
-	    || regexMatch[2] == "else if"
-	    || regexMatch[2] == "for"
-	    || regexMatch[2] == "while")
+	const regexMatch = /^((?:.|\n)*?(?:^|\W))(\w+\s*[* \t\n]*)\s+(\w+)\s*\(((?:.|\n)*?)\)(?:.|\n)*?\{((?:.|\n)*)\}/m.exec(s);
+	if (!regexMatch)
 		return null;
 	/**
 	 * @type {Func}
 	 */
 	let func = new Func();
-	func.returnType = regexMatch[1];
-	func.name = regexMatch[2];
-	func.args = convertArgsStrToArray(regexMatch[3], 0);
-	func.body = regexMatch[4];
+	func.attr = regexMatch[1];
+	func.returnType = regexMatch[2];
+	func.name = regexMatch[3];
+	func.args = convertArgsStrToArray(regexMatch[4], 0);
+	func.body = regexMatch[5];
+	if (func.name == "if"
+	    || func.name == "else if"
+	    || func.name == "for"
+	    || func.name == "while")
+		return null;
 	return func;
 }
 
@@ -245,10 +251,9 @@ const fileStr = fs.readFileSync(filename).toString();
 let fileArray = fileStr.split("\n\n");
 fileArray = namespaceMacro(fileArray, namespace);
 for (let i = 0; i < fileArray.length; ++i) {
-	// console.log(fileArray[i]);
-	// const func = getFunc(fileArray[i]);
-	// if (!func)
-	// 	continue;
-	// func.namePrepend("_");
-	// console.log(func.toString());
+	const func = getFunc(fileArray[i]);
+	if (!func)
+		continue;
+	func.namePrepend("_");
+	console.log(func.toString());
 }
