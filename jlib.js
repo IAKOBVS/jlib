@@ -185,16 +185,3 @@ function namespaceMacro(fileArray, prefix, ignorePrefixes)
 	}
 	return fileArray;
 }
-
-const namespace = "PJSTR_";
-const filename = process.argv[2];
-const fileStr = fs.readFileSync(filename).toString();
-let fileArray = fileStr.split("\n\n");
-fileArray = namespaceMacro(fileArray, namespace, [ "JSTR", "jstr", "PJSTR", "pjstr" ]);
-for (let i = 0; i < fileArray.length; ++i) {
-	const func = getFunc(fileArray[i]);
-	if (!func)
-		continue;
-	func.namePrepend("_");
-	console.log(func.toString());
-}
